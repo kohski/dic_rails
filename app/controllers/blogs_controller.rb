@@ -1,7 +1,5 @@
 class BlogsController < ApplicationController
-  before_action :set_blog,only: [:show,:edit,:update]
-  
-  
+  before_action :set_blog,only: [:show,:edit,:update,:destroy]
   
   def index
     @blogs = Blog.all
@@ -14,7 +12,7 @@ class BlogsController < ApplicationController
   def create
     @blog = Blog.new(blog_params)
     if @blog.save
-      redirect_to new_blog_path, notice: "ブログを作成しました!"
+      redirect_to blogs_path, notice:"ブログを作成しました!"
     else
       render 'new'
     end
@@ -29,12 +27,17 @@ class BlogsController < ApplicationController
   end
   
   def update
-    @blog = Blog.find(parames[:id])
+    @blog = Blog.find(params[:id])
     if @blog .update(blog_params)
-      refirect_to blog_path,notice:"ブログを編集しました"
+      redirect_to blog_path, notice: "ブログを編集しました"
     else
       render 'edit'
     end
+  end
+  
+  def destroy
+    @blog.destroy
+    redirect_to blogs_path, notice:"ブログを削除しました。"
   end
   
   
@@ -45,7 +48,7 @@ class BlogsController < ApplicationController
   end
   
   def set_blog
-    @blog = Blog.find(pasams[:id])
+    @blog = Blog.find(params[:id])
   end
   
   
