@@ -1,12 +1,16 @@
 class BlogsController < ApplicationController
-  before_action :set_blog,only: [:show,:edit,:update,:destroy]
+  before_action :set_blog,only: [:show,:edit,:update,:destroy,]
   
   def index
     @blogs = Blog.all
   end
   
   def new
-    @blog = Blog.new
+    if params[:back]
+      @blog = Blog.new(blog_params)
+    else
+      @blog = Blog.new
+    end
   end
   
   def create
@@ -38,6 +42,11 @@ class BlogsController < ApplicationController
   def destroy
     @blog.destroy
     redirect_to blogs_path, notice:"ブログを削除しました。"
+  end
+  
+  def confirm
+    @blog = Blog.new(blog_params)
+    render :new if @blog.invalid?
   end
   
   
